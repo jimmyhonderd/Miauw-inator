@@ -1,6 +1,6 @@
 # Miauw-inator
 
-Evil hairless-cat logic puzzle (one cat per row, column and colour; cats never touch) in VWAB-stijl met een LEDJOCKEY-tintje. Progressive levels (5x5 to 9x9), daily puzzle, three hearts, one hint.
+Evil hairless-cat logic puzzle (one cat per row, column and colour; cats never touch) in VWAB-stijl met een LEDJOCKEY-tintje. Two games: Cats (progressive levels 6x6 to 10x10, daily puzzle, three hearts, one hint) and Bottles (water-sort, 3 to 10 colours, always solvable).
 
 Speel: https://jimmyhonderd.github.io/Miauw-inator/
 

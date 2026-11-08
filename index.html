@@ -34,8 +34,8 @@ main{display:grid;place-items:center;min-height:0}
 .cell{position:relative;display:grid;place-items:center;box-sizing:border-box;border:1px solid rgba(0,0,0,.5);background-image:linear-gradient(160deg,rgba(255,255,255,.07),rgba(0,0,0,.18))}
 .cell.bt{border-top:3px solid #000}.cell.bl{border-left:3px solid #000}
 .cell img{width:94%;height:94%;object-fit:contain;pointer-events:none}
-.cell .x{width:30%;aspect-ratio:1/1;position:relative;opacity:.55}
-.cell .x:before,.cell .x:after{content:"";position:absolute;left:46%;top:-6%;width:9%;height:112%;background:#000;border-radius:3px;transform:rotate(45deg)}
+.cell .x{width:42%;aspect-ratio:1/1;position:relative;opacity:.92}
+.cell .x:before,.cell .x:after{content:"";position:absolute;left:41%;top:-6%;width:18%;height:112%;background:#0a0a0b;border-radius:4px;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(255,255,255,.18)}
 .cell .x:after{transform:rotate(-45deg)}
 .cell.cat img{filter:drop-shadow(0 0 8px rgba(255,32,50,.8)) drop-shadow(0 4px 6px rgba(0,0,0,.7))}
 .cell.bad{animation:bad .6s}
@@ -51,7 +51,13 @@ main{display:grid;place-items:center;min-height:0}
 .bottle .l{position:absolute;left:0;right:0;height:22.5%;opacity:0;transition:opacity .22s,background .22s,bottom .22s;box-shadow:inset 0 3px 6px rgba(255,255,255,.18),inset 0 -4px 8px rgba(0,0,0,.25)}
 .bottle .l.on{opacity:1}
 .bottle .l:after{content:"";position:absolute;left:14%;top:12%;width:14%;height:70%;border-radius:40%;background:rgba(255,255,255,.22);filter:blur(1.5px)}
-.bottle .l.top{border-radius:40% 40% 0 0/10px 10px 0 0}
+.bottle .l.top{border-radius:40% 40% 0 0/10px 10px 0 0;overflow:visible}
+.bottle .l.top:before{content:"";position:absolute;left:-6%;right:-6%;top:-9%;height:22%;border-radius:50%;background:rgba(255,255,255,.28);filter:blur(1px);animation:wave 2.4s ease-in-out infinite;transform-origin:center}
+@keyframes wave{0%,100%{transform:translateX(-4%) scaleY(.8) rotate(-2deg)}50%{transform:translateX(4%) scaleY(1.15) rotate(2deg)}}
+.bottle .l .b{position:absolute;width:9%;aspect-ratio:1/1;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 4px rgba(255,255,255,.6);opacity:0;animation:bub var(--bd,3s) linear infinite;animation-delay:var(--bs,0s);left:var(--bx,50%)}
+@keyframes bub{0%{bottom:4%;opacity:0;transform:scale(.6)}15%{opacity:.8}90%{opacity:.5}100%{bottom:92%;opacity:0;transform:scale(1.1)}}
+.bottle.slosh .l{animation:slosh .7s ease-out}
+@keyframes slosh{0%{transform:skewY(0)}20%{transform:skewY(-6deg) translateY(-2px)}45%{transform:skewY(5deg)}70%{transform:skewY(-3deg)}100%{transform:skewY(0)}}
 .bottle.pour{animation:pour .35s}
 @keyframes pour{0%{transform:translateY(-14px) rotate(0)}50%{transform:translateY(-22px) rotate(-14deg)}100%{transform:translateY(-14px) rotate(0)}}
 #moves{display:none}
@@ -273,7 +279,7 @@ function startBottles(L){ game='bottles'; mode='level'; cur=L; over=false; bSel=
   $('modeLbl').textContent='Bottles'; $('lvl').textContent=L; $('hint').textContent='TAP BOTTLE · TAP TARGET';
   ['title','win','lose'].forEach(i=>$(i).hidden=true); bBuild(); t0=performance.now(); clearInterval(timer); timer=setInterval(tick,250); tick(); }
 function bBuild(){ const w=$('bottles'); w.innerHTML=''; B.forEach((b,i)=>{ const d=document.createElement('div'); d.className='bottle'; d.dataset.i=i;
-    for(let k=0;k<CAP;k++){ const l=document.createElement('div'); l.className='l'; l.style.bottom=(k*22.5+1)+'%'; d.appendChild(l); }
+    for(let k=0;k<CAP;k++){ const l=document.createElement('div'); l.className='l'; l.style.bottom=(k*22.5+1)+'%'; for(let q=0;q<2;q++){ const bb=document.createElement('i'); bb.className='b'; bb.style.setProperty('--bx',(15+Math.random()*60)+'%'); bb.style.setProperty('--bd',(2.2+Math.random()*2.5)+'s'); bb.style.setProperty('--bs',(-Math.random()*4)+'s'); l.appendChild(bb); } d.appendChild(l); }
     d.addEventListener('pointerdown',e=>{ e.preventDefault(); bTap(i); }); w.appendChild(d); }); bFit(); bRender(); }
 function bFit(){ const m=document.querySelector('main'); const n=B.length; const W=m.clientWidth-20, H=m.clientHeight-20;
   let best=40; for(let cols=Math.min(n,8);cols>=3;cols--){ const rows=Math.ceil(n/cols); const bw=Math.min((W-(cols-1)*14)/cols,(H-(rows-1)*26)/rows/3.1); if(bw>best) best=bw; }
@@ -284,7 +290,7 @@ function bRender(){ [...$('bottles').children].forEach((d,i)=>{ const b=B[i]; d.
 function bTap(i){ if(over) return;
   if(bSel<0){ if(B[i].length) bSel=i; bRender(); return; }
   if(bSel===i){ bSel=-1; bRender(); return; }
-  if(bCanPour(B,bSel,i)||(B[i].length===0&&B[bSel].length)){ bHist.push(B); B=bPour(B,bSel,i); bMoves++; const d=$('bottles').children[bSel]; d.classList.remove('pour'); void d.offsetWidth; d.classList.add('pour'); bSel=-1; bRender(); if(bSolved(B)) win(); }
+  if(bCanPour(B,bSel,i)||(B[i].length===0&&B[bSel].length)){ bHist.push(B); B=bPour(B,bSel,i); bMoves++; const d=$('bottles').children[bSel]; d.classList.remove('pour'); void d.offsetWidth; d.classList.add('pour'); const t=$('bottles').children[i]; t.classList.remove('slosh'); void t.offsetWidth; t.classList.add('slosh'); bSel=-1; bRender(); if(bSolved(B)) win(); }
   else { bSel=B[i].length?i:-1; bRender(); } }
 function bUndo(){ if(over||!bHist.length) return; B=bHist.pop(); bMoves++; bSel=-1; bRender(); }
 window.__bdbg={gen:bGen,solvable:bSolvable,state:()=>B,set:st=>{B=st;bRender();}};

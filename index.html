@@ -254,7 +254,7 @@ $('hintBtn').onclick=hint;
 $('menuBtn').onclick=showTitle; $('winMenu').onclick=showTitle; $('loseMenu').onclick=showTitle;
 addEventListener('contextmenu',e=>e.preventDefault()); addEventListener('gesturestart',e=>e.preventDefault()); addEventListener('dblclick',e=>e.preventDefault());
 /* ---------- BOTTLES (water sort) ---------- */
-const BCOL=['#39ff5a','#E9B400','#ff2032','#2bd1ff','#c13bff','#ff7a00','#ff3fa4','#b8ff2e','#f2f2f2','#3a5bff','#00ffc8','#ff5e5e'];
+const BCOL=['#ff1e2d','#2251ff','#ffe800','#00b84a','#9b2cff','#ff7a00','#00e1ff','#ff4fd2','#f4f4f4','#7a3e14'];
 const CAP=4; let B=[], bSel=-1, bHist=[], bMoves=0, bCols=0;
 function bLevelColors(L){ return L<=2?3:L<=5?4:L<=9?5:L<=14?6:L<=20?7:L<=29?8:L<=40?9:10; }
 function bKey(st){ return st.map(b=>b.join('')).sort().join('|'); }
